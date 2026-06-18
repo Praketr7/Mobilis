@@ -216,7 +216,7 @@ function StationsView({ temporal }) {
 }
 
 // ── Main dashboard ─────────────────────────────────────────────
-export default function ChallanIQDashboard() {
+export default function Dashboard() {
   const [view, setView] = useState("leaderboard");
   const [selectedIdx, setSelectedIdx] = useState(0);
 
@@ -246,7 +246,7 @@ export default function ChallanIQDashboard() {
 
   if (loading) return (
     <div style={{ padding: 32, textAlign: "center", color: "#666", fontFamily: "system-ui, sans-serif" }}>
-      Loading ChallanIQ data…
+      Loading data…
     </div>
   );
   if (error) return (
@@ -277,7 +277,7 @@ export default function ChallanIQDashboard() {
       {/* Header */}
       <div style={{ paddingBottom: 12, borderBottom: "0.5px solid var(--border)", marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 500, color: "var(--t1)", letterSpacing: "-0.01em" }}>
-          🛡 ChallanIQ — Command Overview
+          🛡  Gridlock — Command Overview
         </h1>
         <p style={{ fontSize: 13, color: "var(--t2)", marginTop: 2 }}>
           Bengaluru Traffic Police · Parking Enforcement Intelligence
