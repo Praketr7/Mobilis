@@ -52,6 +52,8 @@ def compute_cis(row):
 def main():
     print("Loading CSV...")
     csv_path = DATA_DIR / "violations_raw.csv"
+    if not csv_path.exists():
+        csv_path = Path(__file__).parent.parent / "violations_raw.csv"
     df = pd.read_csv(csv_path)
     print(f"  Loaded {len(df):,} records")
 
@@ -68,6 +70,10 @@ def main():
     # Drop rows with no lat/long
     df = df.dropna(subset=["latitude", "longitude"])
 
+    # Ensure there is an 'id' column for DBSCAN merge
+    if "id" not in df.columns:
+        df["id"] = df.index
+
     print("Computing junction stats...")
     # ── Junction-level aggregation ──────────────────────────────
     named = df[df["junction_name"] != "No Junction"].copy()
@@ -79,7 +85,9 @@ def main():
         vehicle_counts = grp["vehicle_type"].value_counts().to_dict()
         hourly = grp["hour"].value_counts().to_dict()
         daily = grp["day_of_week"].value_counts().to_dict()
-        peak_hour = grp["hour"].mode()[0] if len(grp) > 0 else 9
+
+        hour_mode = grp["hour"].dropna().mode()
+        peak_hour = hour_mode.iloc[0] if not hour_mode.empty else 9
 
         junction_stats.append({
             "junction_name": jname,
@@ -101,14 +109,15 @@ def main():
     jdf["risk_level"] = pd.cut(
         jdf["cis"],
         bins=[0, 2.5, 5, 7.5, 10],
-        labels=["LOW", "MODERATE", "HIGH", "CRITICAL"]
+        labels=["LOW", "MODERATE", "HIGH", "CRITICAL"],
+        include_lowest=True
     )
     jdf = jdf.drop(columns=["max_count"])
     jdf = jdf.sort_values("cis", ascending=False)
 
     out = jdf.to_dict(orient="records")
     (OUT_DIR / "junctions.json").write_text(json.dumps(out, indent=2))
-    print(f"  Saved {len(out)} junctions → junctions.json")
+    print(f"  Saved {len(out)} junctions -> junctions.json")
 
     print("Computing temporal patterns...")
     # ── City-wide temporal patterns ──────────────────────────────
@@ -127,7 +136,7 @@ def main():
         }
     }
     (OUT_DIR / "temporal.json").write_text(json.dumps(temporal, indent=2))
-    print("  Saved → temporal.json")
+    print("  Saved -> temporal.json")
 
     print("Running DBSCAN clustering...")
     # ── Spatial clustering ───────────────────────────────────────
@@ -135,13 +144,46 @@ def main():
     sample_df = df.sample(n=min(50000, len(df)), random_state=42)
     coords = sample_df[["latitude", "longitude"]].values
     # eps=0.005 ≈ 500m radius, min_samples=30
-    db = DBSCAN(eps=0.005, min_samples=30, algorithm="ball_tree", metric="haversine").fit(
+    # In radians: 500m / 6371000m ≈ 0.0000785
+    db = DBSCAN(eps=0.0000785, min_samples=30, algorithm="ball_tree", metric="haversine").fit(
         np.radians(coords)
     )
     sample_df = sample_df.copy()
     sample_df["cluster"] = db.labels_
-    df = df.merge(sample_df[["id", "cluster"]], on="id", how="left")
-    df["cluster"] = df["cluster"].fillna(-1).astype(int)
+
+    # Compute centroids of the sampled clusters
+    centroids = []
+    for cid in sorted(sample_df["cluster"].unique()):
+        if cid == -1:
+            continue
+        cgrp = sample_df[sample_df["cluster"] == cid]
+        centroids.append({
+            "cluster": cid,
+            "lat": cgrp["latitude"].mean(),
+            "lng": cgrp["longitude"].mean()
+        })
+
+    if centroids:
+        from sklearn.neighbors import BallTree
+        centroid_coords = np.array([[c["lat"], c["lng"]] for c in centroids])
+        centroid_rad = np.radians(centroid_coords)
+        df_rad = np.radians(df[["latitude", "longitude"]].values)
+        
+        tree = BallTree(centroid_rad, metric="haversine")
+        dists, indices = tree.query(df_rad, k=1)
+        
+        # Threshold of 500m in radians
+        max_dist_rad = 0.5 / 6371.0
+        
+        assigned_clusters = []
+        for dist, idx in zip(dists, indices):
+            if dist[0] <= max_dist_rad:
+                assigned_clusters.append(int(centroids[idx[0]]["cluster"]))
+            else:
+                assigned_clusters.append(-1)
+        df["cluster"] = assigned_clusters
+    else:
+        df["cluster"] = -1
 
     clusters = []
     for cid in sorted(df["cluster"].unique()):
@@ -150,25 +192,32 @@ def main():
         cgrp = df[df["cluster"] == cid]
         vtypes_flat = [v for sublist in cgrp["vtypes"] for v in sublist]
         type_counts = Counter(vtypes_flat)
+
+        veh_mode = cgrp["vehicle_type"].dropna().mode()
+        top_veh = veh_mode.iloc[0] if not veh_mode.empty else "UNKNOWN"
+
+        hour_mode = cgrp["hour"].dropna().mode()
+        peak_h = int(hour_mode.iloc[0]) if not hour_mode.empty else 9
+
         clusters.append({
             "cluster_id": int(cid),
             "lat": round(cgrp["latitude"].mean(), 6),
             "lng": round(cgrp["longitude"].mean(), 6),
             "violation_count": len(cgrp),
             "top_violation": type_counts.most_common(1)[0][0] if type_counts else "UNKNOWN",
-            "top_vehicle": cgrp["vehicle_type"].mode()[0] if len(cgrp) > 0 else "UNKNOWN",
-            "peak_hour": int(cgrp["hour"].mode()[0]) if len(cgrp) > 0 else 9,
+            "top_vehicle": top_veh,
+            "peak_hour": peak_h,
             "severity": round(cgrp["severity"].mean(), 3),
         })
 
     clusters_sorted = sorted(clusters, key=lambda x: x["violation_count"], reverse=True)
     (OUT_DIR / "clusters.json").write_text(json.dumps(clusters_sorted, indent=2))
-    print(f"  Found {len(clusters_sorted)} clusters → clusters.json")
+    print(f"  Found {len(clusters_sorted)} clusters -> clusters.json")
 
-    print("\n✅ Preprocessing complete. Files in data/processed/")
-    print(f"   junctions.json  — {len(out)} junctions")
-    print(f"   temporal.json   — city-wide patterns")
-    print(f"   clusters.json   — {len(clusters_sorted)} hotspot clusters")
+    print("\n[OK] Preprocessing complete. Files in data/processed/")
+    print(f"   junctions.json  - {len(out)} junctions")
+    print(f"   temporal.json   - city-wide patterns")
+    print(f"   clusters.json   - {len(clusters_sorted)} hotspot clusters")
 
 if __name__ == "__main__":
     main()

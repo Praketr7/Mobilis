@@ -77,9 +77,9 @@ def get_summary():
         "hotspot_clusters": len([c for c in clusters if c["violation_count"] >= 100]),
         "critical_junctions": len(critical),
         "high_risk_junctions": len(high),
-        "peak_hour": max(temporal["hourly_city"], key=temporal["hourly_city"].get),
+        "peak_hour": max(temporal["hourly_city"], key=temporal["hourly_city"].get) if temporal.get("hourly_city") else "0",
         "top_junction": junctions[0]["junction_name"] if junctions else None,
-        "top_station": max(temporal["station_counts"], key=temporal["station_counts"].get),
+        "top_station": max(temporal["station_counts"], key=temporal["station_counts"].get) if temporal.get("station_counts") else None,
     }
 
 @app.get("/action-card/{junction_name}")
@@ -105,7 +105,7 @@ def get_action_card(junction_name: str, hour: int = Query(default=9)):
 
     top_vtype = list(junction["top_violations"].keys())[0] if junction["top_violations"] else "WRONG PARKING"
     top_vehicle = list(junction["vehicle_breakdown"].keys())[0] if junction["vehicle_breakdown"] else "SCOOTER"
-    commercial = any(v in junction["vehicle_breakdown"] for v in ["MAXI-CAB", "LGV", "HTV"])
+    commercial = any(v in junction["vehicle_breakdown"] for v in ["MAXI-CAB", "LGV", "HTV", "HGV"])
 
     risk = junction.get("risk_level", "MODERATE")
     cis = junction.get("cis", 5.0)
