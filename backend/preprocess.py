@@ -83,7 +83,7 @@ def main():
         vtypes_flat = [v for sublist in grp["vtypes"] for v in sublist]
         type_counts = Counter(vtypes_flat)
         vehicle_counts = grp["vehicle_type"].value_counts().to_dict()
-        hourly = grp["hour"].value_counts().to_dict()
+        hourly = grp["hour"].astype(int).value_counts().to_dict()
         daily = grp["day_of_week"].value_counts().to_dict()
 
         hour_mode = grp["hour"].dropna().mode()
@@ -99,7 +99,7 @@ def main():
             "peak_hour": int(peak_hour),
             "top_violations": dict(type_counts.most_common(5)),
             "vehicle_breakdown": vehicle_counts,
-            "hourly_pattern": {str(k): int(v) for k, v in hourly.items()},
+            "hourly_pattern": {str(int(k)): int(v) for k, v in hourly.items()},
             "daily_pattern": daily,
         })
 
@@ -121,12 +121,12 @@ def main():
 
     print("Computing temporal patterns...")
     # ── City-wide temporal patterns ──────────────────────────────
-    hourly_city = df["hour"].value_counts().sort_index().to_dict()
+    hourly_city = df["hour"].astype(int).value_counts().sort_index().to_dict()
     daily_city = df["day_of_week"].value_counts().to_dict()
     station_counts = df["police_station"].value_counts().head(15).to_dict()
 
     temporal = {
-        "hourly_city": {str(k): int(v) for k, v in hourly_city.items()},
+        "hourly_city": {str(int(k)): int(v) for k, v in hourly_city.items()},
         "daily_city": daily_city,
         "station_counts": station_counts,
         "total_violations": len(df),

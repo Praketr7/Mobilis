@@ -25,13 +25,35 @@ DATA_DIR = Path(__file__).parent / "data" / "processed"
 def load(filename):
     return json.loads((DATA_DIR / filename).read_text())
 
+
+def normalize_hour_key(value):
+    try:
+        return str(int(float(value)))
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def normalize_hour_map(hour_map):
+    return {
+        normalize_hour_key(key): int(value)
+        for key, value in (hour_map or {}).items()
+    }
+
 # ── Cache on startup ────────────────────────────────────────────
 _cache = {}
 
 @app.on_event("startup")
 def load_cache():
-    _cache["junctions"] = load("junctions.json")
-    _cache["temporal"] = load("temporal.json")
+    junctions = load("junctions.json")
+    for junction in junctions:
+        junction["peak_hour"] = int(float(junction.get("peak_hour", 0)))
+        junction["hourly_pattern"] = normalize_hour_map(junction.get("hourly_pattern"))
+
+    temporal = load("temporal.json")
+    temporal["hourly_city"] = normalize_hour_map(temporal.get("hourly_city"))
+
+    _cache["junctions"] = junctions
+    _cache["temporal"] = temporal
     _cache["clusters"] = load("clusters.json")
     print(f"Loaded: {len(_cache['junctions'])} junctions, {len(_cache['clusters'])} clusters")
 

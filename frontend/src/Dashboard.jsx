@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
@@ -28,10 +28,10 @@ function normalizeJunction(j) {
 function fmt(n) { return n.toLocaleString("en-IN"); }
 
 function cisColor(cis) {
-  if (cis >= 7.5) return "#E24B4A";
-  if (cis >= 5) return "#EF9F27";
-  if (cis >= 2.5) return "#378ADD";
-  return "#639922";
+  if (cis >= 7.5) return "#B42318";
+  if (cis >= 5) return "#C79200";
+  if (cis >= 2.5) return "#3B7D3A";
+  return "#2E6B2E";
 }
 
 // ── Sub-components ─────────────────────────────────────────────
@@ -41,12 +41,12 @@ function MetricCard({ label, value, sub, color }) {
     <div style={{ 
       background: "var(--bg1)", 
       border: "1px solid var(--border)", 
-      borderRadius: 8, 
-      padding: "16px 20px",
-      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.04)",
-      transition: "all 0.15s ease"
+      borderRadius: 4, 
+      padding: "16px 18px",
+      boxShadow: "none",
+      borderTop: `3px solid ${color || "var(--accent)"}`
     }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--t2)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.05em" }}>{label}</div>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--t2)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</div>
       <div style={{ fontSize: 26, fontWeight: 700, color: color || "var(--t1)", lineHeight: 1.1 }}>{value}</div>
       <div style={{ fontSize: 11, color: "var(--t3)", marginTop: 6 }}>{sub}</div>
     </div>
@@ -58,9 +58,9 @@ function Badge({ rl }) {
     <span style={{
       fontSize: 10, fontWeight: 600, padding: "3px 8px", borderRadius: 4,
       letterSpacing: "0.02em",
-      background: { CRITICAL: "#FCEBEB", HIGH: "#FAEEDA", MODERATE: "#E6F1FB", LOW: "#EAF3DE" }[rl],
-      color: { CRITICAL: "#791F1F", HIGH: "#633806", MODERATE: "#0C447C", LOW: "#27500A" }[rl],
-      border: `0.5px solid ${{ CRITICAL: "#F3A9A9", HIGH: "#E5C396", MODERATE: "#ADCFF2", LOW: "#C5DF9E" }[rl]}`,
+      background: { CRITICAL: "#FDECEC", HIGH: "#FFF4D6", MODERATE: "#EEF7EE", LOW: "#E7F2E7" }[rl],
+      color: { CRITICAL: "#8F1D1D", HIGH: "#7A5A00", MODERATE: "#275B27", LOW: "#275B27" }[rl],
+      border: `1px solid ${{ CRITICAL: "#F0B7B7", HIGH: "#E4CB91", MODERATE: "#C6DDC6", LOW: "#C6DDC6" }[rl]}`,
     }}>{rl}</span>
   );
 }
@@ -76,7 +76,7 @@ function HourHeatmap({ hp }) {
           const alpha = Math.max(0.06, maxH > 0 ? v / maxH : 0);
           return (
             <div key={h} title={`${h}:00 — ${v} violations`}
-              style={{ height: 24, borderRadius: 2, background: `rgba(55,138,221,${alpha.toFixed(2)})` }} />
+              style={{ height: 24, borderRadius: 2, background: `rgba(59,125,58,${alpha.toFixed(2)})` }} />
           );
         })}
       </div>
@@ -98,7 +98,7 @@ function ViolationBars({ tv }) {
         <div key={k} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
           <div style={{ fontSize: 11, fontWeight: 500, color: "var(--t2)", width: 160, flexShrink: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{k}</div>
           <div style={{ flex: 1, height: 8, background: "var(--bg2)", borderRadius: 4, overflow: "hidden", border: "1px solid var(--border)" }}>
-            <div style={{ height: "100%", borderRadius: 4, background: "#378ADD", width: `${Math.round((v / total) * 100)}%` }} />
+            <div style={{ height: "100%", borderRadius: 4, background: "#3B7D3A", width: `${Math.round((v / total) * 100)}%` }} />
           </div>
           <div style={{ fontSize: 11, color: "var(--t2)", width: 45, textAlign: "right", flexShrink: 0, fontWeight: 600 }}>{fmt(v)}</div>
         </div>
@@ -118,10 +118,10 @@ function DetailPanel({ j }) {
     <div style={{ 
       background: "var(--bg1)", 
       border: "1px solid var(--border)", 
-      borderRadius: 10, 
+      borderRadius: 4, 
       padding: "20px 24px", 
       marginBottom: 12,
-      boxShadow: "0 4px 12px rgba(0,0,0,0.02)"
+      boxShadow: "none"
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
         <div style={{ flex: 1 }}>
@@ -138,12 +138,12 @@ function DetailPanel({ j }) {
         background: "var(--bg2)", 
         borderRadius: 8, 
         padding: "14px 16px", 
-        borderLeft: "4px solid #378ADD", 
+        borderLeft: "4px solid #3B7D3A", 
         border: "1px solid var(--border)",
         borderLeftWidth: 4,
         marginBottom: 20 
       }}>
-        <div style={{ fontSize: 11, fontWeight: 600, color: "#378ADD", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>⚡ Deployment Recommendation</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Deployment Recommendation</div>
         <div style={{ fontSize: 13, color: "var(--t1)", lineHeight: 1.5, fontWeight: 400 }}>
           Deploy <strong>{unitType}</strong> to {j.n} by {j.ph}:00. Peak enforcement window: {j.ph}:00–{(j.ph + 2) % 24}:00.
           {towing && " Towing vehicle required — main road blockages detected."}
@@ -209,40 +209,40 @@ function TemporalView({ temporal }) {
 
   return (
     <>
-      <div style={{ background: "var(--bg1)", border: "1px solid var(--border)", borderRadius: 10, padding: "20px 24px", marginBottom: 16, boxShadow: "0 2px 4px rgba(0,0,0,0.01)" }}>
+      <div style={{ background: "var(--bg1)", border: "1px solid var(--border)", borderRadius: 4, padding: "20px 24px", marginBottom: 16, boxShadow: "none" }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--t1)", textTransform: "uppercase", letterSpacing: "0.03em", marginBottom: 16 }}>Violations by hour of day — city wide</div>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={hourData} barSize={8}>
-            <XAxis dataKey="hour" tick={{ fontSize: 9, fill: "#666" }} interval={1} tickLine={false} axisLine={false} />
+            <XAxis dataKey="hour" tick={{ fontSize: 10, fill: "#666", fontWeight: 600 }} interval={1} tickLine={false} axisLine={false} />
             <YAxis tick={{ fontSize: 9, fill: "#666" }} tickFormatter={v => v >= 1000 ? Math.round(v / 1000) + "k" : v} width={32} tickLine={false} axisLine={false} />
             <Tooltip 
-              contentStyle={{ background: "#ffffff", border: "1px solid #ddd", borderRadius: 6, fontSize: 11, fontFamily: "Inter" }}
+              contentStyle={{ background: "#ffffff", border: "1px solid var(--border)", borderRadius: 4, fontSize: 11, fontFamily: "Segoe UI, Arial, sans-serif" }}
               formatter={v => [fmt(v), "Violations"]} 
               labelFormatter={l => `Hour: ${l}`} 
             />
             <Bar dataKey="v" radius={[2, 2, 0, 0]}>
               {hourData.map((d, i) => (
-                <Cell key={i} fill={d.v > 20000 ? "#E24B4A" : d.v > 10000 ? "#EF9F27" : "#378ADD"} />
+                <Cell key={i} fill={d.v > 20000 ? "#B42318" : d.v > 10000 ? "#C79200" : "#3B7D3A"} />
               ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div style={{ marginTop: 16, fontSize: 12, color: "var(--t2)", background: "var(--bg2)", padding: "10px 14px", borderRadius: 6, border: "1px solid var(--border)" }}>
-          💡 Peak enforcement window: <strong style={{ color: "var(--t1)" }}>{peakLabel}</strong> — {peakPercent}% of all violations occur in this 4-hour window. This is a critical time-aware deployment opportunity.
+        <div style={{ marginTop: 16, fontSize: 12, color: "var(--t2)", background: "var(--bg2)", padding: "10px 14px", borderRadius: 4, border: "1px solid var(--border)" }}>
+          Peak enforcement window: <strong style={{ color: "var(--t1)" }}>{peakLabel}</strong> — {peakPercent}% of all violations occur in this 4-hour window.
         </div>
       </div>
 
-      <div style={{ background: "var(--bg1)", border: "1px solid var(--border)", borderRadius: 10, padding: "20px 24px", marginBottom: 16, boxShadow: "0 2px 4px rgba(0,0,0,0.01)" }}>
+      <div style={{ background: "var(--bg1)", border: "1px solid var(--border)", borderRadius: 4, padding: "20px 24px", marginBottom: 16, boxShadow: "none" }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--t1)", textTransform: "uppercase", letterSpacing: "0.03em", marginBottom: 16 }}>Violations by day of week</div>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={dayData} barSize={24}>
             <XAxis dataKey="day" tick={{ fontSize: 10, fill: "#666" }} tickLine={false} axisLine={false} />
             <YAxis tick={{ fontSize: 9, fill: "#666" }} tickFormatter={v => Math.round(v / 1000) + "k"} width={32} tickLine={false} axisLine={false} />
             <Tooltip 
-              contentStyle={{ background: "#ffffff", border: "1px solid #ddd", borderRadius: 6, fontSize: 11, fontFamily: "Inter" }}
+              contentStyle={{ background: "#ffffff", border: "1px solid var(--border)", borderRadius: 4, fontSize: 11, fontFamily: "Segoe UI, Arial, sans-serif" }}
               formatter={v => [fmt(v), "Violations"]} 
             />
-            <Bar dataKey="v" fill="#378ADD" radius={[3, 3, 0, 0]} />
+            <Bar dataKey="v" fill="#3B7D3A" radius={[3, 3, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -255,17 +255,17 @@ function StationsView({ temporal }) {
     .sort((a, b) => b[1] - a[1])
     .map(([name, v]) => ({ name, v }));
   return (
-    <div style={{ background: "var(--bg1)", border: "1px solid var(--border)", borderRadius: 10, padding: "20px 24px", marginBottom: 16, boxShadow: "0 2px 4px rgba(0,0,0,0.01)" }}>
+    <div style={{ background: "var(--bg1)", border: "1px solid var(--border)", borderRadius: 4, padding: "20px 24px", marginBottom: 16, boxShadow: "none" }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: "var(--t1)", textTransform: "uppercase", letterSpacing: "0.03em", marginBottom: 16 }}>Top police stations by violation volume</div>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={stations} layout="vertical" barSize={16}>
           <XAxis type="number" tick={{ fontSize: 9, fill: "#666" }} tickFormatter={v => Math.round(v / 1000) + "k"} tickLine={false} axisLine={false} />
           <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#666" }} width={120} tickLine={false} axisLine={false} />
           <Tooltip 
-            contentStyle={{ background: "#ffffff", border: "1px solid #ddd", borderRadius: 6, fontSize: 11, fontFamily: "Inter" }}
+            contentStyle={{ background: "#ffffff", border: "1px solid var(--border)", borderRadius: 6, fontSize: 11, fontFamily: "Segoe UI, Arial, sans-serif" }}
             formatter={v => [fmt(v), "Violations"]} 
           />
-          <Bar dataKey="v" fill="#378ADD" radius={[0, 3, 3, 0]} />
+          <Bar dataKey="v" fill="#3B7D3A" radius={[0, 3, 3, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -317,12 +317,12 @@ export default function Dashboard() {
   }, []);
 
   if (loading) return (
-    <div style={{ padding: 48, textAlign: "center", color: "#666", fontFamily: "Inter, sans-serif" }}>
+    <div style={{ padding: 48, textAlign: "center", color: "#666", fontFamily: "Segoe UI, Arial, sans-serif" }}>
       Loading data…
     </div>
   );
   if (error) return (
-    <div style={{ padding: 48, color: "#E24B4A", fontFamily: "Inter, sans-serif" }}>
+    <div style={{ padding: 48, color: "#B42318", fontFamily: "Segoe UI, Arial, sans-serif" }}>
       ⚠ Could not reach API at <code>{API}</code> — {error}.<br />
       Make sure <code>uvicorn main:app --reload</code> is running.
     </div>
@@ -335,17 +335,20 @@ export default function Dashboard() {
 
   return (
     <div style={{
-      "--bg1": "#ffffff",
-      "--bg2": "#f9fafb",
-      "--t1": "#111827",
-      "--t2": "#4b5563",
-      "--t3": "#9ca3af",
-      "--border": "#e5e7eb",
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      "--bg1": "#fbfaf6",
+      "--bg2": "#f4f1e8",
+      "--t1": "#1b1b1b",
+      "--t2": "#514c44",
+      "--t3": "#7f7668",
+      "--border": "#d8d0c2",
+      "--accent": "#3B7D3A",
+      "--accent-amber": "#C79200",
+      "--accent-red": "#B42318",
+      fontFamily: "'Segoe UI', Arial, sans-serif",
       padding: "24px",
       maxWidth: 1080,
       margin: "0 auto",
-      background: "#ffffff",
+      background: "#f3f0e8",
       minHeight: "100vh",
       color: "var(--t1)",
       display: "flex",
@@ -353,17 +356,17 @@ export default function Dashboard() {
       gap: "24px"
     }}>
       {/* Header */}
-      <div style={{ paddingBottom: 16, borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+      <div style={{ paddingBottom: 16, borderBottom: "2px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
         <div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--t1)", letterSpacing: "-0.02em", margin: 0 }}>
-            🛡  Gridlock
+          <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--t1)", letterSpacing: "0.01em", margin: 0 }}>
+            Gridlock Enforcement Dashboard
           </h1>
           <p style={{ fontSize: 13, color: "var(--t2)", marginTop: 4, marginBottom: 0 }}>
             Bengaluru Traffic Police · Parking Enforcement Decision Support
           </p>
         </div>
-        <div style={{ fontSize: 11, color: "var(--t3)", fontWeight: 500 }}>
-          BTP × Hackathon 2026 Core Engine
+        <div style={{ fontSize: 11, color: "var(--t3)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          Official Operations View
         </div>
       </div>
 
@@ -371,25 +374,25 @@ export default function Dashboard() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
         <MetricCard label="Total Violations" value={fmt(summary?.total_violations ?? 0)} sub="from processed dataset" />
         <MetricCard label="Junctions Monitored" value={summary?.junctions_monitored ?? "—"} sub="Named BTP intersections" />
-        <MetricCard label="High Risk Junctions" value={summary?.high_risk_junctions ?? "—"} sub="CIS score ≥ 5.0" color="#EF9F27" />
+        <MetricCard label="High Risk Junctions" value={summary?.high_risk_junctions ?? "—"} sub="CIS score ≥ 5.0" color="var(--accent-amber)" />
         <MetricCard label="Peak Surge Hour" value={peakHourLabel} sub={peakHourVal ? `${fmt(peakHourVal)} violations` : ""} />
       </div>
 
       {/* Nav */}
-      <div style={{ display: "flex", gap: 8, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>
+      <div style={{ display: "flex", gap: 8, borderBottom: "1px solid var(--border)", paddingBottom: 12, flexWrap: "wrap" }}>
         {[
           ["leaderboard", "Junction leaderboard"],
-          ["map", "🗺 Hotspot Map"],
+          ["map", "Hotspot Map"],
           ["temporal", "Temporal patterns"],
           ["stations", "By police station"]
         ].map(([v, label]) => (
           <button key={v} onClick={() => setView(v)} style={{
-            fontSize: 12, padding: "6px 14px",
-            borderRadius: 6,
-            border: `1px solid ${view === v ? "#378ADD" : "var(--border)"}`,
-            background: view === v ? "rgba(55, 138, 221, 0.06)" : "var(--bg1)",
-            color: view === v ? "#378ADD" : "var(--t2)",
-            fontWeight: 500,
+            fontSize: 12, padding: "7px 14px",
+            borderRadius: 4,
+            border: `1px solid ${view === v ? "var(--accent)" : "var(--border)"}`,
+            background: view === v ? "rgba(59, 125, 58, 0.08)" : "var(--bg1)",
+            color: view === v ? "var(--accent)" : "var(--t2)",
+            fontWeight: 600,
             cursor: "pointer",
             transition: "all 0.15s ease",
           }}>{label}</button>
@@ -425,41 +428,47 @@ export default function Dashboard() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {junctions.map((j, i) => (
-                <div key={j.n} onClick={() => setSelectedIdx(i)}
-                  style={{
-                    background: "var(--bg1)",
-                    border: `1px solid ${i === selectedIdx ? "#378ADD" : "var(--border)"}`,
-                    borderRadius: 8, padding: "12px 16px",
-                    display: "flex", alignItems: "center", gap: 16,
-                    cursor: "pointer",
-                    boxShadow: i === selectedIdx ? "0 4px 12px rgba(55,138,221,0.06)" : "0 1px 2px rgba(0,0,0,0.01)",
-                    transition: "all 0.15s ease",
-                    transform: i === selectedIdx ? "translateY(-1px)" : "none",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (i !== selectedIdx) e.currentTarget.style.borderColor = "var(--t2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (i !== selectedIdx) e.currentTarget.style.borderColor = "var(--border)";
-                  }}
-                >
-                  <span style={{ fontSize: 11, color: "var(--t3)", width: 20, flexShrink: 0, textAlign: "right", fontWeight: 600 }}>{i + 1}</span>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: "var(--t1)" }}>{j.n}</div>
-                    <div style={{ fontSize: 11, color: "var(--t2)", marginTop: 2 }}>
-                      {j.ps} · {fmt(j.vc)} violations · peak {j.ph}:00
+                <Fragment key={j.n}>
+                  <div onClick={() => setSelectedIdx(prev => prev === i ? null : i)}
+                    style={{
+                      background: "var(--bg1)",
+                      border: `1px solid ${i === selectedIdx ? "var(--accent)" : "var(--border)"}`,
+                      borderRadius: 4, padding: "12px 16px",
+                      display: "flex", alignItems: "center", gap: 16,
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      transition: "all 0.15s ease",
+                      transform: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (i !== selectedIdx) e.currentTarget.style.borderColor = "var(--accent)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (i !== selectedIdx) e.currentTarget.style.borderColor = "var(--border)";
+                    }}
+                  >
+                    <span style={{ fontSize: 11, color: "var(--t3)", width: 20, flexShrink: 0, textAlign: "right", fontWeight: 600 }}>{i + 1}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--t1)" }}>{j.n}</div>
+                      <div style={{ fontSize: 11, color: "var(--t2)", marginTop: 2 }}>
+                        {j.ps} · {fmt(j.vc)} violations · peak {j.ph}:00
+                      </div>
                     </div>
+                    <div style={{ width: 80, height: 6, background: "var(--bg2)", borderRadius: 3, overflow: "hidden", border: "1px solid var(--border)", flexShrink: 0 }}>
+                      <div style={{ height: "100%", borderRadius: 3, width: `${(j.cis / 10) * 100}%`, background: cisColor(j.cis) }} />
+                    </div>
+                    <span style={{ fontSize: 12, fontWeight: 600, width: 28, textAlign: "right", flexShrink: 0, color: cisColor(j.cis) }}>{j.cis}</span>
+                    <Badge rl={j.rl} />
                   </div>
-                  <div style={{ width: 80, height: 6, background: "var(--bg2)", borderRadius: 3, overflow: "hidden", border: "1px solid var(--border)", flexShrink: 0 }}>
-                    <div style={{ height: "100%", borderRadius: 3, width: `${(j.cis / 10) * 100}%`, background: cisColor(j.cis) }} />
-                  </div>
-                  <span style={{ fontSize: 12, fontWeight: 600, width: 28, textAlign: "right", flexShrink: 0, color: cisColor(j.cis) }}>{j.cis}</span>
-                  <Badge rl={j.rl} />
-                </div>
+                  {i === selectedIdx && (
+                    <div style={{ marginTop: 8, paddingLeft: 24 }}>
+                      <DetailPanel j={j} />
+                    </div>
+                  )}
+                </Fragment>
               ))}
             </div>
           </div>
-          {junctions[selectedIdx] && <DetailPanel j={junctions[selectedIdx]} />}
         </div>
       )}
 
@@ -540,7 +549,7 @@ function ChatWidget() {
     <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9999, fontFamily: "Inter, sans-serif" }}>
       {!isOpen ? (
         <button onClick={() => setIsOpen(true)} style={{
-          background: "#378ADD",
+          background: "#3B7D3A",
           color: "#fff",
           border: "none",
           borderRadius: 24,
@@ -548,7 +557,7 @@ function ChatWidget() {
           fontSize: 14,
           fontWeight: 600,
           cursor: "pointer",
-          boxShadow: "0 4px 16px rgba(55, 138, 221, 0.3)",
+          boxShadow: "0 4px 16px rgba(59, 125, 58, 0.3)",
           display: "flex",
           alignItems: "center",
           gap: 8,
@@ -572,7 +581,7 @@ function ChatWidget() {
           overflow: "hidden",
         }}>
           {/* Header */}
-          <div style={{ background: "#378ADD", color: "#fff", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ background: "#3B7D3A", color: "#fff", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 16 }}>🤖</span>
               <div>
@@ -591,7 +600,7 @@ function ChatWidget() {
               <div key={idx} style={{
                 alignSelf: m.role === "user" ? "flex-end" : "flex-start",
                 maxWidth: "80%",
-                background: m.role === "user" ? "#378ADD" : "#ffffff",
+                background: m.role === "user" ? "#3B7D3A" : "#ffffff",
                 color: m.role === "user" ? "#ffffff" : "var(--t1)",
                 padding: "10px 14px",
                 borderRadius: m.role === "user" ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
@@ -621,12 +630,12 @@ function ChatWidget() {
                   borderRadius: 12,
                   padding: "4px 10px",
                   fontSize: 11,
-                  color: "#378ADD",
+                  color: "#3B7D3A",
                   cursor: "pointer",
                   fontWeight: 500,
                   transition: "all 0.15s ease",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(55, 138, 221, 0.06)"; e.currentTarget.style.borderColor = "#378ADD"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(59, 125, 58, 0.06)"; e.currentTarget.style.borderColor = "#3B7D3A"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "var(--bg2)"; e.currentTarget.style.borderColor = "var(--border)"; }}
                 >
                   {s}
@@ -653,7 +662,7 @@ function ChatWidget() {
               }}
             />
             <button onClick={() => handleSend(inputText)} style={{
-              background: "#378ADD",
+              background: "#3B7D3A",
               color: "#fff",
               border: "none",
               borderRadius: 6,

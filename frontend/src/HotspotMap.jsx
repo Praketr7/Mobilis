@@ -3,10 +3,10 @@ import L from "leaflet";
 
 // Helpers
 function cisColor(cis) {
-  if (cis >= 7.5) return "#E24B4A";
-  if (cis >= 5) return "#EF9F27";
-  if (cis >= 2.5) return "#378ADD";
-  return "#639922";
+  if (cis >= 7.5) return "#B42318";
+  if (cis >= 5) return "#C79200";
+  if (cis >= 2.5) return "#3B7D3A";
+  return "#2E6B2E";
 }
 
 export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
@@ -49,7 +49,7 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
       // Coordinates centered on Bengaluru: 12.9716, 77.5946
       const map = L.map(mapContainerRef.current).setView([12.9716, 77.5946], 12);
       
-      // Use premium CartoDB Positron tile layer for high-end corporate aesthetics (light theme)
+        // Use a neutral light tile layer to match the official dashboard style.
       L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: "abcd",
@@ -113,14 +113,13 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
         maxZoom: 15,
         max: 0.25, // Lower threshold ensures red areas are clearly visible and bloom nicely
         minOpacity: 0.15,
-        gradient: {
-          0.1: "#378ADD",  // Blue (Low density)
-          0.3: "#00D2C4",  // Cyan (Low-Mid)
-          0.5: "#639922",  // Green (Mid)
-          0.7: "#EF9F27",  // Orange (High)
-          0.85: "#FF3B30", // Vibrant Bright Red (Very High)
-          1.0: "#C62828"   // Deep rich red (Critical core)
-        }
+          gradient: {
+            0.1: "#2E6B2E",
+            0.4: "#3B7D3A",
+            0.6: "#C79200",
+            0.8: "#C79200",
+            1.0: "#B42318"
+          }
       });
       heatLayer.addTo(layerGroup);
 
@@ -174,8 +173,8 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
         });
 
         const popupContent = `
-          <div style="font-family: sans-serif; min-width: 200px;">
-            <h4 style="margin: 0 0 6px 0; color: #E24B4A; font-size: 14px;">🔥 Hotspot Cluster #${h.cluster_id}</h4>
+          <div style="font-family: Segoe UI, Arial, sans-serif; min-width: 200px;">
+            <h4 style="margin: 0 0 6px 0; color: #B42318; font-size: 14px;">Hotspot Cluster #${h.cluster_id}</h4>
             <div style="font-size: 12px; line-height: 1.4; color: #444;">
               <strong>Violations:</strong> ${h.violation_count.toLocaleString("en-IN")}<br/>
               <strong>Primary Offense:</strong> ${h.top_violation}<br/>
@@ -205,7 +204,7 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
         popupDiv.style.fontFamily = "sans-serif";
         popupDiv.style.minWidth = "220px";
         popupDiv.innerHTML = `
-          <h4 style="margin: 0 0 4px 0; color: #333; font-size: 13px;">📍 ${j.n}</h4>
+          <h4 style="margin: 0 0 4px 0; color: #1b1b1b; font-size: 13px;">${j.n}</h4>
           <div style="font-size: 11px; color: #666; margin-bottom: 8px;">
             Police Station: ${j.ps}<br/>
             CIS Score: <strong>${j.cis}</strong> (${j.rl})<br/>
@@ -218,7 +217,7 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
         btn.style.width = "100%";
         btn.style.padding = "5px 0";
         btn.style.fontSize = "11px";
-        btn.style.background = "#378ADD";
+        btn.style.background = "#3B7D3A";
         btn.style.color = "#fff";
         btn.style.border = "none";
         btn.style.borderRadius = "4px";
@@ -237,26 +236,26 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
   }, [junctions, hotspots, filter, heatScriptLoaded, onSelectJunction]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, height: 550 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, height: 550 }}>
       {/* Filters HUD */}
       <div style={{
         display: "flex", gap: 8, padding: "10px 14px", 
         background: "var(--bg1)", border: "1px solid var(--border)", 
-        borderRadius: 8, alignItems: "center"
+        borderRadius: 4, alignItems: "center"
       }}>
-        <span style={{ fontSize: 12, fontWeight: 500, color: "var(--t2)" }}>Map Overlays:</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--t2)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Map Overlays</span>
         {[
-          ["heatmap", "🔥 Visual Heatmap"],
-          ["all", "📍 Junction Pins"],
-          ["commercial", "🚚 Commercial Focus"],
-          ["blockage", "🚧 Carriageway Blockages"]
+          ["heatmap", "Visual Heatmap"],
+          ["all", "Junction Pins"],
+          ["commercial", "Commercial Focus"],
+          ["blockage", "Carriageway Blockages"]
         ].map(([v, label]) => (
           <button key={v} onClick={() => setFilter(v)} style={{
-            fontSize: 11, padding: "5px 12px", borderRadius: 4,
-            border: `1px solid ${filter === v ? "#378ADD" : "var(--border)"}`,
-            background: filter === v ? "rgba(55,138,221,0.08)" : "var(--bg1)",
-            color: filter === v ? "#378ADD" : "var(--t2)",
-            fontWeight: filter === v ? 600 : 400,
+            fontSize: 11, padding: "6px 12px", borderRadius: 4,
+            border: `1px solid ${filter === v ? "var(--accent)" : "var(--border)"}`,
+            background: filter === v ? "rgba(59,125,58,0.08)" : "var(--bg1)",
+            color: filter === v ? "var(--accent)" : "var(--t2)",
+            fontWeight: filter === v ? 600 : 500,
             cursor: "pointer",
             transition: "all 0.15s ease"
           }}>{label}</button>
@@ -264,51 +263,51 @@ export default function HotspotMap({ junctions, hotspots, onSelectJunction }) {
       </div>
 
       {/* Map Canvas */}
-      <div style={{ position: "relative", flex: 1, minHeight: 450, borderRadius: 10, overflow: "hidden", border: "1px solid var(--border)" }}>
+      <div style={{ position: "relative", flex: 1, minHeight: 450, borderRadius: 4, overflow: "hidden", border: "1px solid var(--border)" }}>
         <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
         
         {/* Dynamic Legend */}
         <div style={{
           position: "absolute", bottom: 12, right: 12, zIndex: 1000,
-          background: "rgba(255,255,255,0.95)", border: "1px solid #ddd",
-          borderRadius: 6, padding: "10px 12px", fontSize: 10, fontFamily: "sans-serif",
-          display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+          background: "rgba(255,255,255,0.96)", border: "1px solid var(--border)",
+          borderRadius: 4, padding: "10px 12px", fontSize: 10, fontFamily: "Segoe UI, Arial, sans-serif",
+          display: "flex", flexDirection: "column", gap: 6, boxShadow: "none"
         }}>
           {filter === "heatmap" ? (
             <>
-              <div style={{ fontWeight: 600, color: "#333", marginBottom: 2 }}>Violation Density</div>
+              <div style={{ fontWeight: 600, color: "#333", marginBottom: 2, textTransform: "uppercase", letterSpacing: "0.05em" }}>Violation Density</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 12, height: 12, background: "#FF3B30", borderRadius: 2 }} /> Critical Surge
+                  <span style={{ width: 12, height: 12, background: "#B42318", borderRadius: 2 }} /> Critical Surge
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 12, height: 12, background: "#EF9F27", borderRadius: 2 }} /> High Density
+                  <span style={{ width: 12, height: 12, background: "#C79200", borderRadius: 2 }} /> High Density
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 12, height: 12, background: "#639922", borderRadius: 2 }} /> Moderate
+                  <span style={{ width: 12, height: 12, background: "#3B7D3A", borderRadius: 2 }} /> Moderate
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ width: 12, height: 12, background: "#378add", borderRadius: 2 }} /> Low Density
+                  <span style={{ width: 12, height: 12, background: "#2E6B2E", borderRadius: 2 }} /> Low Density
                 </div>
               </div>
             </>
           ) : (
             <>
-              <div style={{ fontWeight: 600, color: "#333", marginBottom: 2 }}>CIS Severity</div>
+              <div style={{ fontWeight: 600, color: "#333", marginBottom: 2, textTransform: "uppercase", letterSpacing: "0.05em" }}>CIS Severity</div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#E24B4A" }} /> Critical (≥ 7.5)
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#B42318" }} /> Critical (≥ 7.5)
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#EF9F27" }} /> High (≥ 5.0)
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#C79200" }} /> High (≥ 5.0)
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#378ADD" }} /> Moderate (≥ 2.5)
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#3B7D3A" }} /> Moderate (≥ 2.5)
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#639922" }} /> Low
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#2E6B2E" }} /> Low
               </div>
-              <div style={{ borderTop: "1px solid #eee", marginTop: 4, paddingTop: 4, display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 14, height: 14, borderRadius: "50%", background: "rgba(255,59,48,0.18)", border: "1px solid #FF3B30" }} /> Hotspot Zone
+              <div style={{ borderTop: "1px solid var(--border)", marginTop: 4, paddingTop: 4, display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 14, height: 14, borderRadius: "50%", background: "rgba(180,35,24,0.18)", border: "1px solid #B42318" }} /> Hotspot Zone
               </div>
             </>
           )}

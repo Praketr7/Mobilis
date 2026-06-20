@@ -45,7 +45,7 @@ export default function Temporal({ temporal }) {
         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--t1)", textTransform: "uppercase", letterSpacing: "0.03em", marginBottom: 16 }}>Violations by hour of day — city wide</div>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={hourData} barSize={8}>
-            <XAxis dataKey="hour" tick={{ fontSize: 9, fill: "#666" }} interval={1} tickLine={false} axisLine={false} />
+            <XAxis dataKey="hour" tick={{ fontSize: 10, fill: "#666", fontWeight: 600 }} interval={1} tickLine={false} axisLine={false} />
             <YAxis tick={{ fontSize: 9, fill: "#666" }} tickFormatter={v => v >= 1000 ? Math.round(v / 1000) + "k" : v} width={32} tickLine={false} axisLine={false} />
             <Tooltip 
               contentStyle={{ background: "#ffffff", border: "1px solid #ddd", borderRadius: 6, fontSize: 11, fontFamily: "Inter" }}
