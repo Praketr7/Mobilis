@@ -465,6 +465,208 @@ export default function Dashboard() {
 
       {view === "temporal" && temporal && <TemporalView temporal={temporal} />}
       {view === "stations" && temporal && <StationsView temporal={temporal} />}
+
+      {/* Floating AI Assistant Widget */}
+      <ChatWidget />
+    </div>
+  );
+}
+
+// ── Floating Chatbot Widget ────────────────────────────────────
+function ChatWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: "Hello officer! I am your Assistant. Ask me anything about traffic congestion, hotspots, or deployment recommendations today." }
+  ]);
+  const [inputText, setInputText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Helper to parse basic Markdown (bold/italic) to HTML
+  const formatMessageText = (text) => {
+    if (!text) return "";
+    let escaped = text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    
+    // Bold **text** -> <strong>text</strong>
+    escaped = escaped.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    // Italic *text* -> <em>text</em>
+    escaped = escaped.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    
+    return <span dangerouslySetInnerHTML={{ __html: escaped }} />;
+  };
+
+  // Auto scroll to bottom
+  useEffect(() => {
+    const el = document.getElementById("chat-message-list");
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [messages, isLoading, isOpen]);
+
+  const handleSend = async (text) => {
+    if (!text.trim()) return;
+    const userMsg = { role: "user", content: text };
+    setMessages(prev => [...prev, userMsg]);
+    setInputText("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${API}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          history: messages.map(m => ({ role: m.role, content: m.content })).slice(-8)
+        })
+      });
+      const data = await response.json();
+      setMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { role: "assistant", content: "⚠️ Could not connect to Assistant. Please check if the backend is running." }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const suggestions = [
+    "Show top hotspots today",
+    "Where to deploy in Upparpet now?",
+    "Show city overview status"
+  ];
+
+  return (
+    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9999, fontFamily: "Inter, sans-serif" }}>
+      {!isOpen ? (
+        <button onClick={() => setIsOpen(true)} style={{
+          background: "#378ADD",
+          color: "#fff",
+          border: "none",
+          borderRadius: 24,
+          padding: "12px 20px",
+          fontSize: 14,
+          fontWeight: 600,
+          cursor: "pointer",
+          boxShadow: "0 4px 16px rgba(55, 138, 221, 0.3)",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          transition: "all 0.2s ease-in-out",
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+        onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+        >
+          <span>💬</span> Assistant
+        </button>
+      ) : (
+        <div style={{
+          width: 360,
+          height: 480,
+          background: "#fff",
+          border: "1px solid var(--border)",
+          borderRadius: 12,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}>
+          {/* Header */}
+          <div style={{ background: "#378ADD", color: "#fff", padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 16 }}>🤖</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>Assistant</div>
+                <div style={{ fontSize: 10, opacity: 0.85, display: "flex", alignItems: "center", gap: 4 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ADE80", display: "inline-block" }}></span> Online
+                </div>
+              </div>
+            </div>
+            <button onClick={() => setIsOpen(false)} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", fontSize: 16, padding: 4 }}>✕</button>
+          </div>
+
+          {/* Messages */}
+          <div id="chat-message-list" style={{ flex: 1, padding: 16, overflowY: "auto", display: "flex", flexDirection: "column", gap: 12, background: "#fafafa" }}>
+            {messages.map((m, idx) => (
+              <div key={idx} style={{
+                alignSelf: m.role === "user" ? "flex-end" : "flex-start",
+                maxWidth: "80%",
+                background: m.role === "user" ? "#378ADD" : "#ffffff",
+                color: m.role === "user" ? "#ffffff" : "var(--t1)",
+                padding: "10px 14px",
+                borderRadius: m.role === "user" ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
+                fontSize: 13,
+                lineHeight: 1.4,
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                border: m.role === "user" ? "none" : "1px solid var(--border)",
+                whiteSpace: "pre-line"
+              }}>
+                {formatMessageText(m.content)}
+              </div>
+            ))}
+            {isLoading && (
+              <div style={{ alignSelf: "flex-start", background: "#ffffff", border: "1px solid var(--border)", padding: "10px 14px", borderRadius: "12px 12px 12px 2px", fontSize: 13, color: "var(--t2)", display: "flex", gap: 4, alignItems: "center" }}>
+                <span>Assistant is typing...</span>
+              </div>
+            )}
+          </div>
+
+          {/* Suggestions */}
+          {!isLoading && (
+            <div style={{ padding: "8px 12px", background: "#fff", borderTop: "1px solid var(--border)", display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {suggestions.map((s, idx) => (
+                <button key={idx} onClick={() => handleSend(s)} style={{
+                  background: "var(--bg2)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 12,
+                  padding: "4px 10px",
+                  fontSize: 11,
+                  color: "#378ADD",
+                  cursor: "pointer",
+                  fontWeight: 500,
+                  transition: "all 0.15s ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(55, 138, 221, 0.06)"; e.currentTarget.style.borderColor = "#378ADD"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "var(--bg2)"; e.currentTarget.style.borderColor = "var(--border)"; }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Input */}
+          <div style={{ padding: 12, borderTop: "1px solid var(--border)", display: "flex", gap: 8, background: "#fff" }}>
+            <input 
+              type="text" 
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend(inputText)}
+              placeholder="Ask Assistant..." 
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                border: "1px solid var(--border)",
+                borderRadius: 6,
+                fontSize: 13,
+                outline: "none",
+              }}
+            />
+            <button onClick={() => handleSend(inputText)} style={{
+              background: "#378ADD",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              padding: "8px 14px",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer"
+            }}>
+              Send
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,6 +5,11 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from the .env file in the workspace root
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 app = FastAPI(title="Gridlock API")
 
@@ -129,3 +134,94 @@ def get_action_card(junction_name: str, hour: int = Query(default=9)):
         "lat": junction["lat"],
         "lng": junction["lng"],
     }
+
+
+from pydantic import BaseModel
+from typing import List, Optional
+import os
+from groq import Groq
+
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    message: str
+    history: Optional[List[ChatMessage]] = None
+
+SYSTEM_PROMPT = """You are Assistant, a helpful and tactical decision support chatbot for Bengaluru Traffic Police (BTP) officers.
+
+You have access to live BTP parking violation intelligence and deployment data.
+
+Guidelines:
+1. For casual greetings, thanks, or general conversation, respond naturally, professionally, and politely (e.g., "You're welcome! Let me know if you need any other deployment insights.").
+2. Keep it protected: refuse to engage in inappropriate, illegal, or completely irrelevant off-topic queries.
+3. When asked traffic, deployment, or junction status questions, format your response in a highly structured, concise manner matching the dashboard's deployment card style:
+   - **Junction**: <Name> (CIS: <Score>/10 | <Risk Level> Risk)
+   - **Deployment**: Deploy <Unit Type> (e.g. Challan unit or Commercial vehicle unit) by <Peak Hour>:00.
+   - **Peak Window**: <Peak Hour>:00 to <Peak Hour + 2>:00
+   - **Advisories**: (Add towing vehicle coordinates or commercial coordination flag only if relevant, based on the top violation types or vehicle breakdown ratios).
+4. Emojis must be avoided as much as possible. Responses should remain concise, professional, and directly informative. No hedging, warnings, or disclaimers.
+"""
+
+@app.post("/chat")
+def chat_query(payload: ChatRequest):
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        return {
+            "response": "⚠️ Groq API key is not configured. Please set the GROQ_API_KEY environment variable in your .env file."
+        }
+
+    # Fetch live context to pass to Groq
+    junctions = _cache.get("junctions", [])
+    temporal = _cache.get("temporal", {})
+
+    import datetime
+    now_hour = datetime.datetime.now().hour
+    now_day = datetime.datetime.now().strftime("%A")
+
+    context_blob = {
+        "current_time": {"hour": now_hour, "day": now_day},
+        "top_junctions": [
+            {
+                "junction_name": j["junction_name"],
+                "police_station": j["police_station"],
+                "violation_count": j["violation_count"],
+                "cis": j["cis"],
+                "risk_level": j["risk_level"],
+                "peak_hour": j["peak_hour"],
+                "top_violations": j["top_violations"]
+            }
+            for j in junctions[:15]
+        ],
+        "hourly_city": temporal.get("hourly_city", {}),
+        "station_counts": temporal.get("station_counts", {})
+    }
+
+    user_prompt = f"""Current time context:
+Day: {now_day}, Hour: {now_hour:02d}:00
+
+Live Gridlock data context:
+{json.dumps(context_blob, indent=2)}
+
+Officer query: {payload.message}"""
+
+    # Build messages array
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    if payload.history:
+        for msg in payload.history:
+            # map roles properly (e.g. system, user, assistant)
+            messages.append({"role": msg.role, "content": msg.content})
+    messages.append({"role": "user", "content": user_prompt})
+
+    try:
+        client = Groq(api_key=api_key)
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            max_tokens=800,
+            messages=messages,
+            temperature=0.2,
+        )
+        return {"response": response.choices[0].message.content}
+    except Exception as e:
+        return {"response": f"⚠️ Error querying Groq: {str(e)}"}
