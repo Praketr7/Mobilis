@@ -12,7 +12,6 @@ env/
 
 # Data — raw CSV and processed cache (regenerate locally)
 data/violations_raw.csv
-data/processed/
 
 # OS
 .DS_Store

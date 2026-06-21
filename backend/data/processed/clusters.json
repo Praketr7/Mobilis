@@ -1,0 +1,472 @@
+[
+  {
+    "cluster_id": 0,
+    "lat": 12.975747,
+    "lng": 77.577937,
+    "violation_count": 26127,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 3,
+    "severity": 0.657
+  },
+  {
+    "cluster_id": 12,
+    "lat": 13.185186,
+    "lng": 77.680073,
+    "violation_count": 4596,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 23,
+    "severity": 0.734
+  },
+  {
+    "cluster_id": 2,
+    "lat": 12.940055,
+    "lng": 77.696125,
+    "violation_count": 2469,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 3,
+    "severity": 0.891
+  },
+  {
+    "cluster_id": 14,
+    "lat": 12.841872,
+    "lng": 77.645918,
+    "violation_count": 2077,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 7,
+    "severity": 0.641
+  },
+  {
+    "cluster_id": 3,
+    "lat": 13.005083,
+    "lng": 77.685577,
+    "violation_count": 1213,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 5,
+    "severity": 0.672
+  },
+  {
+    "cluster_id": 8,
+    "lat": 13.096476,
+    "lng": 77.598175,
+    "violation_count": 1112,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 20,
+    "severity": 0.639
+  },
+  {
+    "cluster_id": 16,
+    "lat": 13.047595,
+    "lng": 77.575686,
+    "violation_count": 1104,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "MOTOR CYCLE",
+    "peak_hour": 20,
+    "severity": 0.627
+  },
+  {
+    "cluster_id": 5,
+    "lat": 12.970164,
+    "lng": 77.646972,
+    "violation_count": 1036,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 2,
+    "severity": 0.799
+  },
+  {
+    "cluster_id": 32,
+    "lat": 13.19123,
+    "lng": 77.646216,
+    "violation_count": 956,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 20,
+    "severity": 0.806
+  },
+  {
+    "cluster_id": 11,
+    "lat": 12.911199,
+    "lng": 77.603331,
+    "violation_count": 799,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 0,
+    "severity": 0.697
+  },
+  {
+    "cluster_id": 10,
+    "lat": 12.987427,
+    "lng": 77.734502,
+    "violation_count": 692,
+    "top_violation": "PARKING ON FOOTPATH",
+    "top_vehicle": "MOTOR CYCLE",
+    "peak_hour": 6,
+    "severity": 0.707
+  },
+  {
+    "cluster_id": 9,
+    "lat": 12.899219,
+    "lng": 77.675512,
+    "violation_count": 690,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 5,
+    "severity": 0.656
+  },
+  {
+    "cluster_id": 22,
+    "lat": 13.034901,
+    "lng": 77.624567,
+    "violation_count": 601,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 21,
+    "severity": 0.698
+  },
+  {
+    "cluster_id": 21,
+    "lat": 12.876,
+    "lng": 77.595827,
+    "violation_count": 581,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 0,
+    "severity": 0.651
+  },
+  {
+    "cluster_id": 19,
+    "lat": 12.978982,
+    "lng": 77.695271,
+    "violation_count": 562,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "MAXI-CAB",
+    "peak_hour": 22,
+    "severity": 0.812
+  },
+  {
+    "cluster_id": 36,
+    "lat": 12.840356,
+    "lng": 77.676916,
+    "violation_count": 438,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 4,
+    "severity": 0.734
+  },
+  {
+    "cluster_id": 4,
+    "lat": 12.989656,
+    "lng": 77.502002,
+    "violation_count": 388,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 5,
+    "severity": 0.685
+  },
+  {
+    "cluster_id": 28,
+    "lat": 12.888535,
+    "lng": 77.562739,
+    "violation_count": 388,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 5,
+    "severity": 0.688
+  },
+  {
+    "cluster_id": 31,
+    "lat": 12.926698,
+    "lng": 77.55078,
+    "violation_count": 354,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 4,
+    "severity": 0.711
+  },
+  {
+    "cluster_id": 18,
+    "lat": 13.002931,
+    "lng": 77.595103,
+    "violation_count": 338,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 22,
+    "severity": 0.648
+  },
+  {
+    "cluster_id": 15,
+    "lat": 13.033574,
+    "lng": 77.557856,
+    "violation_count": 337,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 22,
+    "severity": 0.817
+  },
+  {
+    "cluster_id": 37,
+    "lat": 12.958675,
+    "lng": 77.668046,
+    "violation_count": 327,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 21,
+    "severity": 0.626
+  },
+  {
+    "cluster_id": 38,
+    "lat": 13.007662,
+    "lng": 77.580434,
+    "violation_count": 321,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 6,
+    "severity": 0.745
+  },
+  {
+    "cluster_id": 27,
+    "lat": 13.121575,
+    "lng": 77.63111,
+    "violation_count": 315,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 19,
+    "severity": 0.8
+  },
+  {
+    "cluster_id": 39,
+    "lat": 12.935653,
+    "lng": 77.535814,
+    "violation_count": 311,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 21,
+    "severity": 0.682
+  },
+  {
+    "cluster_id": 17,
+    "lat": 13.022225,
+    "lng": 77.638844,
+    "violation_count": 294,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 7,
+    "severity": 0.63
+  },
+  {
+    "cluster_id": 1,
+    "lat": 13.045458,
+    "lng": 77.507116,
+    "violation_count": 278,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 0,
+    "severity": 0.625
+  },
+  {
+    "cluster_id": 30,
+    "lat": 13.050482,
+    "lng": 77.525522,
+    "violation_count": 251,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 5,
+    "severity": 0.653
+  },
+  {
+    "cluster_id": 23,
+    "lat": 12.98704,
+    "lng": 77.519594,
+    "violation_count": 249,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 4,
+    "severity": 0.689
+  },
+  {
+    "cluster_id": 35,
+    "lat": 12.819013,
+    "lng": 77.688722,
+    "violation_count": 245,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 20,
+    "severity": 0.798
+  },
+  {
+    "cluster_id": 25,
+    "lat": 12.972398,
+    "lng": 77.508839,
+    "violation_count": 239,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 2,
+    "severity": 0.72
+  },
+  {
+    "cluster_id": 20,
+    "lat": 12.918291,
+    "lng": 77.651664,
+    "violation_count": 231,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 5,
+    "severity": 0.646
+  },
+  {
+    "cluster_id": 34,
+    "lat": 12.908059,
+    "lng": 77.547771,
+    "violation_count": 231,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 7,
+    "severity": 0.861
+  },
+  {
+    "cluster_id": 7,
+    "lat": 13.099381,
+    "lng": 77.587836,
+    "violation_count": 230,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 6,
+    "severity": 0.684
+  },
+  {
+    "cluster_id": 41,
+    "lat": 13.045834,
+    "lng": 77.75028,
+    "violation_count": 228,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 6,
+    "severity": 0.727
+  },
+  {
+    "cluster_id": 46,
+    "lat": 12.96051,
+    "lng": 77.732663,
+    "violation_count": 225,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 2,
+    "severity": 0.79
+  },
+  {
+    "cluster_id": 33,
+    "lat": 12.904441,
+    "lng": 77.702423,
+    "violation_count": 219,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 6,
+    "severity": 0.616
+  },
+  {
+    "cluster_id": 40,
+    "lat": 13.057279,
+    "lng": 77.546958,
+    "violation_count": 219,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 6,
+    "severity": 0.683
+  },
+  {
+    "cluster_id": 43,
+    "lat": 13.050748,
+    "lng": 77.552558,
+    "violation_count": 212,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 22,
+    "severity": 0.75
+  },
+  {
+    "cluster_id": 44,
+    "lat": 13.005463,
+    "lng": 77.757415,
+    "violation_count": 207,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 2,
+    "severity": 0.676
+  },
+  {
+    "cluster_id": 26,
+    "lat": 12.992387,
+    "lng": 77.652608,
+    "violation_count": 204,
+    "top_violation": "PARKING IN A MAIN ROAD",
+    "top_vehicle": "CAR",
+    "peak_hour": 1,
+    "severity": 0.949
+  },
+  {
+    "cluster_id": 29,
+    "lat": 12.894636,
+    "lng": 77.599059,
+    "violation_count": 200,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 1,
+    "severity": 0.703
+  },
+  {
+    "cluster_id": 13,
+    "lat": 12.883121,
+    "lng": 77.596636,
+    "violation_count": 184,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 6,
+    "severity": 0.612
+  },
+  {
+    "cluster_id": 45,
+    "lat": 12.98463,
+    "lng": 77.748221,
+    "violation_count": 181,
+    "top_violation": "PARKING IN A MAIN ROAD",
+    "top_vehicle": "SCOOTER",
+    "peak_hour": 4,
+    "severity": 0.894
+  },
+  {
+    "cluster_id": 42,
+    "lat": 13.121285,
+    "lng": 77.612447,
+    "violation_count": 180,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "MAXI-CAB",
+    "peak_hour": 22,
+    "severity": 0.607
+  },
+  {
+    "cluster_id": 24,
+    "lat": 12.951264,
+    "lng": 77.607005,
+    "violation_count": 163,
+    "top_violation": "NO PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 22,
+    "severity": 0.693
+  },
+  {
+    "cluster_id": 6,
+    "lat": 13.054188,
+    "lng": 77.589396,
+    "violation_count": 13,
+    "top_violation": "WRONG PARKING",
+    "top_vehicle": "CAR",
+    "peak_hour": 2,
+    "severity": 0.608
+  }
+]

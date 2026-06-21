@@ -1,0 +1,59 @@
+{
+  "hourly_city": {
+    "0.0": 21760,
+    "1.0": 17155,
+    "2.0": 24770,
+    "3.0": 25707,
+    "4.0": 29102,
+    "5.0": 34085,
+    "6.0": 26890,
+    "7.0": 14608,
+    "8.0": 8556,
+    "9.0": 3145,
+    "10.0": 518,
+    "11.0": 577,
+    "12.0": 219,
+    "13.0": 56,
+    "14.0": 16,
+    "15.0": 66,
+    "16.0": 416,
+    "17.0": 818,
+    "18.0": 1971,
+    "19.0": 10713,
+    "20.0": 11834,
+    "21.0": 19763,
+    "22.0": 22839,
+    "23.0": 22861
+  },
+  "daily_city": {
+    "Sunday": 46863,
+    "Saturday": 43427,
+    "Wednesday": 43065,
+    "Tuesday": 42929,
+    "Friday": 41702,
+    "Thursday": 41528,
+    "Monday": 38931
+  },
+  "station_counts": {
+    "Upparpet": 34468,
+    "Shivajinagar": 28044,
+    "Malleshwaram": 22200,
+    "HAL Old Airport": 20819,
+    "City Market": 17646,
+    "Vijayanagara": 14652,
+    "Rajajinagar": 10998,
+    "Kodigehalli": 10916,
+    "Magadi Road": 8558,
+    "Jeevanbheemanagar": 6736,
+    "K.R. Pura": 6546,
+    "Halasuru Gate": 6294,
+    "Mahadevapura": 6187,
+    "Chikkajala": 5834,
+    "HSR Layout": 5018
+  },
+  "total_violations": 298450,
+  "date_range": {
+    "start": "2023-11-09 19:11:46+00:00",
+    "end": "2024-04-08 17:30:46+00:00"
+  }
+}
