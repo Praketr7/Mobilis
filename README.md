@@ -210,12 +210,6 @@ python preprocess.py              # Run once — processes CSV, outputs JSON cac
 uvicorn main:app --reload
 ```
 
-### Embedded AI Chatbot
-```bash
-cd bot
-python bot.py
-```
-
 ### Frontend
 ```bash
 cd frontend
