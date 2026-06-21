@@ -168,33 +168,6 @@ Officers can also just type freely:
 
 ---
 
-### Daily Brief (auto-sent at 7 AM)
-
-Every morning the bot pushes a briefing to subscribed station channels:
-
-```
-🌅 Mobilis Morning Brief — Wednesday, [Date]
-
-TOP HOTSPOTS TODAY
-1. BTP051 Safina Plaza — CRITICAL (peak: 9–11 AM)
-2. BTP082 KR Market — HIGH (peak: 8–10 AM, LGV heavy)
-3. BTP040 Elite Junction — HIGH (peak: 10 AM–12 PM)
-4. BTP044 Sagar Theatre — MODERATE (peak: 10:30 AM)
-5. BTP211 Central Street — MODERATE (peak: 9 AM)
-
-DEPLOYMENT ADVISORY
-Upparpet station: prioritize Safina Plaza + KR Market split
-City Market station: KR Market commercial vehicle coordination
-Malleshwaram station: Elite Junction + Subbanna Junction rotation
-
-VEHICLE TYPE ADVISORY
-Commercial vehicle (LGV/MAXI-CAB) hotspots today: KR Market, NR Road
-Towing vehicle recommended at: Safina Plaza, Sagar Theatre
-
-```
-
----
-
 ## Tech Stack
 
 | Layer | Technology |
