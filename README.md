@@ -1,4 +1,4 @@
-# TrafficIQ 🚔
+# Mobilis 🚔
 ### Parking Enforcement Decision Support System for Bengaluru Traffic Police
 
 > Built for the BTP × Flipkart Hackathon 2026 | Theme: Poor Visibility on Parking-Induced Congestion
@@ -11,13 +11,13 @@ Bengaluru Traffic Police handle parking enforcement reactively. Officers patrol 
 
 The result: high-violation junctions like Safina Plaza (15,449 violations) and KR Market (11,538 violations) receive the same patrol priority as low-risk zones, carriageways stay choked, and enforcement effort is wasted.
 
-**TrafficIQ turns 298,450 historical violation records into specific, time-aware, actionable deployment decisions — delivered via a command dashboard and an embedded AI chatbot that any BTP officer can use without training.**
+**Mobilis turns 298,450 historical violation records into specific, time-aware, actionable deployment decisions — delivered via a command dashboard and an embedded AI chatbot that any BTP officer can use without training.**
 
 ---
 
-## What TrafficIQ Does
+## What Mobilis Does
 
-TrafficIQ has three layers:
+Mobilis has three layers:
 
 ### 1. Intelligence Engine (Python Backend)
 Processes the raw BTP violation dataset and computes:
@@ -74,7 +74,7 @@ Field-facing interface embedded directly into the website. Officers query in nat
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    TrafficIQ System                     │
+│                    Mobilis System                       │
 ├──────────────┬──────────────────┬───────────────────────┤
 │  Data Layer  │   API Layer      │   Interface Layer     │
 │              │                  │                       │
@@ -173,7 +173,7 @@ Officers can also just type freely:
 Every morning the bot pushes a briefing to subscribed station channels:
 
 ```
-🌅 TrafficIQ Morning Brief — Wednesday, [Date]
+🌅 Mobilis Morning Brief — Wednesday, [Date]
 
 TOP HOTSPOTS TODAY
 1. BTP051 Safina Plaza — CRITICAL (peak: 9–11 AM)
@@ -210,7 +210,7 @@ Towing vehicle recommended at: Safina Plaza, Sagar Theatre
 
 This is not a monitoring tool. Every output is an action.
 
-| TrafficIQ Output | BTP Decision Enabled |
+| Mobilis Output | BTP Decision Enabled |
 |---|---|
 | Junction CIS score + peak hour window | *"Deploy unit to Safina Plaza by 9:00 AM Tuesday — 73% of violations occur before 11 AM"* |
 | Main Road + Double Parking cluster | *"Carriageway obstruction imminent at KR Market — dispatch towing vehicle now"* |
